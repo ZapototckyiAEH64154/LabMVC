@@ -1,0 +1,22 @@
+@model Category
+@{
+    ViewData["Title"] = "Usuń kategorię";
+}
+
+<a asp-action="Index" class="d-inline-block mb-2">← Powrót do listy</a>
+
+<h1>Usunąć kategorię?</h1>
+<p>Czy na pewno chcesz usunąć kategorię <strong>„@Model.Name”</strong>?</p>
+
+@if (Model.Workouts.Any())
+{
+    <div class="alert alert-warning">
+        Ta kategoria ma przypisane treningi (@Model.Workouts.Count) i nie może zostać usunięta.
+    </div>
+}
+
+<form asp-action="Delete" class="mt-3">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger" disabled="@(Model.Workouts.Any())">Tak, usuń</button>
+    <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+</form>

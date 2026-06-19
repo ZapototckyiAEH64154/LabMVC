@@ -1,0 +1,26 @@
+@model Workout
+@{
+    ViewData["Title"] = "Usuń trening";
+}
+
+<a asp-action="Index" class="d-inline-block mb-2">← Powrót do listy</a>
+
+<h1>Usunąć trening?</h1>
+<p>Czy na pewno chcesz usunąć trening <strong>„@Model.Name”</strong>? Tej operacji nie można cofnąć.</p>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Nazwa</dt><dd class="col-sm-9">@Model.Name</dd>
+            <dt class="col-sm-3">Kategoria</dt><dd class="col-sm-9">@Model.Category?.Name</dd>
+            <dt class="col-sm-3">Intensywność</dt><dd class="col-sm-9">@Html.DisplayFor(m => m.Intensity)</dd>
+            <dt class="col-sm-3">Data</dt><dd class="col-sm-9">@Model.ScheduledDate.ToString("yyyy-MM-dd")</dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete" class="mt-3">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Tak, usuń</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Anuluj</a>
+</form>

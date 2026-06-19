@@ -1,0 +1,98 @@
+@model WorkoutFilterViewModel
+@{
+    ViewData["Title"] = "Treningi";
+
+    string IntensityBadge(Intensity i) => i switch
+    {
+        Intensity.Low => "bg-success",
+        Intensity.Medium => "bg-warning text-dark",
+        Intensity.High => "bg-danger",
+        _ => "bg-secondary"
+    };
+}
+
+<h1>Treningi fitness</h1>
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <p><a class="btn btn-primary" asp-action="Create">+ Nowy trening</a></p>
+}
+else
+{
+    <p class="text-muted">Zaloguj się, aby dodawać i edytować treningi.</p>
+}
+
+<form asp-action="Index" method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-3">
+        <label class="form-label">Szukaj</label>
+        <input type="text" name="searchString" value="@Model.SearchString" class="form-control" placeholder="nazwa lub notatka..." />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Kategoria</label>
+        <select name="categoryId" asp-items="Model.Categories" class="form-select">
+            <option value="">— wszystkie —</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Intensywność</label>
+        <select name="intensity" asp-items="Html.GetEnumSelectList<Intensity>()" class="form-select">
+            <option value="">— każda —</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Sortuj</label>
+        <select name="sort" class="form-select">
+            <option value="">Data ↓</option>
+            <option value="date" selected="@(Model.Sort == "date")">Data ↑</option>
+            <option value="name" selected="@(Model.Sort == "name")">Nazwa A–Z</option>
+            <option value="name_desc" selected="@(Model.Sort == "name_desc")">Nazwa Z–A</option>
+            <option value="intensity" selected="@(Model.Sort == "intensity")">Intensywność</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-secondary w-100">Filtruj</button>
+    </div>
+</form>
+
+@if (Model.Workouts.Any())
+{
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Nazwa</th>
+                <th>Kategoria</th>
+                <th>Intensywność</th>
+                <th>Czas (min)</th>
+                <th>Data</th>
+                <th>Ćwiczenia</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Workouts)
+            {
+                <tr>
+                    <td><a asp-action="Details" asp-route-id="@item.Id">@item.Name</a></td>
+                    <td>@item.Category?.Name</td>
+                    <td><span class="badge @IntensityBadge(item.Intensity)">@Html.DisplayFor(m => item.Intensity)</span></td>
+                    <td>@item.DurationMinutes</td>
+                    <td>@item.ScheduledDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Exercises.Count</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Podgląd</a>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <text> | </text><a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
+                            <text> | </text><a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p class="text-muted">Liczba treningów: @Model.Workouts.Count</p>
+}
+else
+{
+    <p class="fst-italic text-muted">Brak treningów spełniających kryteria.</p>
+}

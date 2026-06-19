@@ -1,0 +1,68 @@
+@model Workout
+@{
+    ViewData["Title"] = "Szczegóły treningu";
+
+    string IntensityBadge(Intensity i) => i switch
+    {
+        Intensity.Low => "bg-success",
+        Intensity.Medium => "bg-warning text-dark",
+        Intensity.High => "bg-danger",
+        _ => "bg-secondary"
+    };
+}
+
+<a asp-action="Index" class="d-inline-block mb-2">← Powrót do listy</a>
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">@Model.Name</h1>
+        <p>
+            <span class="badge @IntensityBadge(Model.Intensity)">@Html.DisplayFor(m => m.Intensity)</span>
+            <span class="text-muted ms-2">@Model.Category?.Name</span>
+        </p>
+
+        <dl class="row">
+            <dt class="col-sm-3">Kategoria (rodzaj)</dt>
+            <dd class="col-sm-9">@Model.Category?.Name</dd>
+
+            <dt class="col-sm-3">Intensywność</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(m => m.Intensity)</dd>
+
+            <dt class="col-sm-3">Czas trwania</dt>
+            <dd class="col-sm-9">@Model.DurationMinutes min</dd>
+
+            <dt class="col-sm-3">Data treningu</dt>
+            <dd class="col-sm-9">@Model.ScheduledDate.ToString("yyyy-MM-dd")</dd>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Notes))
+            {
+                <dt class="col-sm-3">Notatki</dt>
+                <dd class="col-sm-9">@Model.Notes</dd>
+            }
+        </dl>
+
+        <h4>Ćwiczenia</h4>
+        @if (Model.Exercises.Any())
+        {
+            <table class="table table-sm">
+                <thead><tr><th>Ćwiczenie</th><th>Serie</th><th>Powtórzenia</th></tr></thead>
+                <tbody>
+                    @foreach (var ex in Model.Exercises)
+                    {
+                        <tr><td>@ex.Name</td><td>@ex.Sets</td><td>@ex.Reps</td></tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="fst-italic text-muted">Brak przypisanych ćwiczeń.</p>
+        }
+
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edytuj</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Usuń</a>
+        }
+    </div>
+</div>

@@ -1,0 +1,30 @@
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    font-size: 0.85rem;
+}
+
+.btn-link.nav-link {
+    border: none;
+    background: none;
+    padding: 0.5rem 1rem;
+}

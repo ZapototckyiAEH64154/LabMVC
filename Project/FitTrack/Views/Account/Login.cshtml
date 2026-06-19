@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Logowanie";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <h1>Logowanie</h1>
+        <hr />
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <form asp-action="Login" method="post">
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+            <div class="form-group mb-3">
+                <label class="control-label">Nazwa użytkownika</label>
+                <input name="username" class="form-control" autofocus />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Hasło</label>
+                <input name="password" type="password" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Zaloguj</button>
+        </form>
+
+        <p class="text-muted mt-3">
+            Dane testowe: <code>admin</code> / <code>Admin123!</code>
+            (konfigurowane w <code>appsettings.json</code>).
+        </p>
+    </div>
+</div>

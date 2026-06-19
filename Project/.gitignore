@@ -1,0 +1,19 @@
+# .NET build output
+bin/
+obj/
+out/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Baza danych SQLite (tworzona przy uruchomieniu)
+*.db
+*.db-shm
+*.db-wal
+fittrack.db*
+
+# Rider / VS Code
+.idea/
+.vscode/
